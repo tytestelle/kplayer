@@ -1,0 +1,120 @@
+#:kivy 2.0.0
+
+<PlayerScreen>:
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgb: 0.1, 0.1, 0.18
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    
+    # 播放区域
+    BoxLayout:
+        id: video_area
+        size_hint_y: 0.65
+        
+        # 视频显示（ffpyplayer的VideoWidget）
+        VideoPlayer:
+            id: video_player
+            keep_ratio: True
+            allow_stretch: True
+            opacity: 1
+    
+    # 信息栏
+    BoxLayout:
+        size_hint_y: 0.08
+        padding: 10, 5
+        spacing: 10
+        
+        Label:
+            id: channel_name
+            text: '未播放'
+            color: 1, 1, 1, 1
+            font_size: '18sp'
+            bold: True
+            size_hint_x: 0.3
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+        
+        Label:
+            id: epg_info
+            text: '暂无节目信息'
+            color: 0.7, 0.7, 0.7, 1
+            font_size: '14sp'
+            size_hint_x: 0.5
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+        
+        Label:
+            id: time_label
+            text: ''
+            color: 0.6, 0.6, 0.6, 1
+            font_size: '14sp'
+            size_hint_x: 0.2
+            halign: 'right'
+            valign: 'middle'
+    
+    # 控制栏
+    BoxLayout:
+        size_hint_y: 0.1
+        padding: 20, 5
+        spacing: 15
+        
+        Button:
+            text: '⏮'
+            font_size: '24sp'
+            background_color: 0, 0, 0, 0
+            color: 1, 1, 1, 0.8
+            on_press: root.play_previous()
+        
+        Button:
+            id: play_btn
+            text: '⏸' if root.player and root.player.is_playing else '▶'
+            font_size: '28sp'
+            background_color: 0, 0, 0, 0
+            color: 1, 1, 1, 0.9
+            on_press: root.toggle_play()
+        
+        Button:
+            text: '⏭'
+            font_size: '24sp'
+            background_color: 0, 0, 0, 0
+            color: 1, 1, 1, 0.8
+            on_press: root.play_next()
+        
+        Widget:
+            size_hint_x: 0.3
+        
+        Button:
+            text: '📋'
+            font_size: '20sp'
+            background_color: 0, 0, 0, 0
+            color: 1, 1, 1, 0.7
+            on_press: root.toggle_channel_list()
+    
+    # 频道列表（默认隐藏）
+    BoxLayout:
+        id: channel_list_container
+        size_hint_y: 0.17
+        opacity: 0
+        disabled: True
+        
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            
+            GridLayout:
+                id: channel_list
+                cols: 1
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 2
+                padding: 5, 5
+
+
+<VideoPlayer@VideoPlayer>:
+    # ffpyplayer的VideoPlayer组件
+    pass
