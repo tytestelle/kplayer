@@ -1,0 +1,17 @@
+{
+  "playlist_url": "http://example.com/channels.m3u",
+  "epg_sources": [
+    {"url": "http://epg1.xml", "type": "xmltv", "priority": 2},
+    {"url": "http://epg2.xml", "type": "xmltv", "priority": 1}
+  ],
+  "decoder": "auto",
+  "aspect_ratio": "16:9",
+  "reconnect": true,
+  "max_retries": 3,
+  "theme": {
+    "primary": "#2196F3",
+    "background": "#1a1a2e"
+  },
+  "user_agent": "KU9Player/2.0",
+  "custom_headers": {}
+}
