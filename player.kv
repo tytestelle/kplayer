@@ -1,0 +1,40 @@
+#:kivy 2.0.0
+<PlayerScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        # 视频区域
+        VideoWidget:
+            id: video_widget
+            size_hint_y: 0.65
+        # 信息栏（频道名、EPG、时间）
+        BoxLayout:
+            height: dp(40)
+            size_hint_y: None
+            Label: id: channel_name
+            Label: id: epg_label
+            Label: id: clock
+        # 控制栏
+        BoxLayout:
+            height: dp(50)
+            size_hint_y: None
+            Button: text: '⏮' on_press: app.prev()
+            Button: id: play_btn text: '⏸' if app.playing else '▶' on_press: app.toggle_play()
+            Button: text: '⏭' on_press: app.next()
+            Spinner:
+                id: ratio_spinner
+                values: ['原始', '16:9', '4:3', '填充']
+                text: '16:9'
+                on_text: app.set_ratio(self.text)
+            Button: text: '📋' on_press: app.show_channel_list()
+        # 频道列表（可滑动）
+        BoxLayout:
+            id: list_container
+            size_hint_y: 0.25
+            opacity: 0
+            disabled: True
+            ScrollView:
+                GridLayout:
+                    id: channel_grid
+                    cols: 1
+                    size_hint_y: None
+                    height: self.minimum_height
