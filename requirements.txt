@@ -1,3 +1,0 @@
-kivy==2.3.0
-ffpyplayer==4.5.1
-requests==2.31.0
