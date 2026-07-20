@@ -1,26 +1,23 @@
-name: Build APK
+name: Build Android APK
 
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:            # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04       # 使用固定版本，避免“latest”变化
+    runs-on: ubuntu-22.04
     timeout-minutes: 60
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          cache: 'pip'
 
       - name: Install system dependencies
         run: |
@@ -32,12 +29,12 @@ jobs:
             cmake libffi-dev libssl-dev \
             wget curl
 
-      - name: Install Python packages
+      - name: Install buildozer
         run: |
-          pip install --upgrade pip setuptools wheel
-          pip install buildozer cython requests
+          pip install --upgrade pip
+          pip install buildozer cython
 
-      - name: Cache Buildozer global directory (SDK/NDK)
+      - name: Cache android-sdk and ndk
         uses: actions/cache@v3
         with:
           path: ~/.buildozer
@@ -45,13 +42,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildozer-
 
-      - name: Build APK (with verbose logs)
+      - name: Build APK
         run: |
-          set -e
-          buildozer android debug --verbose
-        env:
-          # 增加超时时间，防止下载中断
-          BUILDOZER_TIMEOUT: 600
+          # 设置环境变量，使用国内镜像（若您在墙内，可取消注释下一行）
+          # export BUILDOZER_MIRROR=https://mirrors.aliyun.com/buildozer/
+          buildozer -v android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
